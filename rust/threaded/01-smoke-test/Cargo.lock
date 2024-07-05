@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "smoketest"
+name = "smoke-test"
 version = "0.1.0"
