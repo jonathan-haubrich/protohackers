@@ -1,5 +1,5 @@
 use std::{
-    io::{BufRead, BufReader, BufWriter, Write},
+    io::{BufRead, BufReader, Write},
     net::TcpListener,
     thread::JoinHandle,
 };
@@ -77,11 +77,14 @@ fn main() {
                         println!("Bytes read from read: {:?}", bytes_read);
                         println!("Received: {:?}", buf);
 
-                        let mut response = handle_line(&buf);
-                        response.push('\n');
+                        let response = handle_line(&buf);
                         println!("Responding with: {:?}", response);
                         
-                        if let Err(error) =  stream.write(response.as_bytes()) {
+                        if let Err(error) = stream.write(response.as_bytes()) {
+                            println!("Failed to write to remote: {:?}", error);
+                            break;
+                        }
+                        if let Err(error) = stream.write(b"\n") {
                             println!("Failed to write to remote: {:?}", error);
                             break;
                         }
